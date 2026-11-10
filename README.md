@@ -18,6 +18,21 @@ Adaptive minimum 4, maximum 8, mu=0/sigma=5/multiplier=2:
 P(continue)=min(1,2*Phi((-abs(correct-wrong)-mu)/sigma)). No future forcing.
 Final budget tail alone may be below 4. All generated responses count.
 
+### Gaussian Adaptive Sampling
+
+The adaptive sampler initially generates 4 responses per question when the remaining rollout budget permits. After each response from that point onward, let $c$ and $w$ be the numbers of correct and incorrect responses observed so far. The probability of generating one more response is
+
+$$
+p_{\mathrm{continue}}
+= \min\left(1,\; \lambda\,\Phi\left(\frac{-|c-w|-\mu}{\sigma}\right)\right),
+$$
+
+where $\Phi$ is the standard normal cumulative distribution function. The default settings are $\mu=0$, $\sigma=5$, and $\lambda=2$.
+
+A smaller gap between correct and incorrect counts gives a higher continuation probability. For example, after 4 responses, a 2–2 split gives a continuation probability of 100%, a 3–1 split gives about 69%, and a 4–0 split gives about 42%.
+
+After each successful continuation draw, the sampler generates one additional response and recalculates the probability. Sampling for the current question ends when the draw fails, the question reaches 8 responses, or the training arm exhausts its 512-rollout budget. The final question may receive fewer than 4 responses if the remaining budget is smaller.
+
 The fixed arm preserves the prior matched near-uniform baseline. Adaptive for
 that algorithm runs first; K observed questions determine floor(512/K) plus random
 extras. Same question IDs/order and total final budget within each algorithm.
