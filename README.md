@@ -1,4 +1,4 @@
-# GRPO/DRPO checkpoint experiments v11
+# GRPO/DRPO checkpoint experiments
 
 Upload the complete folder as MyDrive/GRPO_DRPO_Checkpoints_Project.
 
